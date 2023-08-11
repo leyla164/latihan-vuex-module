@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "../views/Home.vue";
 import User from "../views/User.vue";
+import UserCreate from "../views/user/Create.vue";
 import Berita from "../views/Berita.vue";
 import Product from "../views/Product.vue";
 import SingleProduct from "../views/SingleProduct.vue";
@@ -20,6 +21,12 @@ const routes = [
         path: "/users",
         name: "User",
         component: User,
+    },
+    {
+        path: "/users/create",
+        name: "UserCreate",
+        component: UserCreate,
+        meta: { requiresLogin: true ,}
     },
     {
         path: "/berita",
@@ -68,4 +75,11 @@ router.beforeEach((to, from, next) => {
     }
 });
 
+router.beforeEach((to, from, next) => {
+    if (to.meta.requireLogin && !store.getters["auth/isAuthenticated"]) {
+        next("/login"); // redirect to home
+    } else {
+        next();
+    }
+});
 export default router;

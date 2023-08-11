@@ -9,12 +9,14 @@ const users = {
         getUsers: (state) => state.userData,
     },
     actions: {
-        async fetchUsers({ commit }) {
+        async fetchUsers({ commit }, userData) {
             try {
-              const data = await axios.get(
-                "https://jsonplaceholder.typicode.com/users"
+              const response= await axios.post(
+                "https://fakestoreapi.com/users",
+                userData
               );
-              commit("SET_USERS", data.data);
+              commit("ADO_USER", response.data);
+               return response.data;
             } 
             catch (error) {
                 alert (error);
@@ -25,6 +27,9 @@ const users = {
     mutations: {
         SET_USERS(state, users) {
             state.userData = users;
+        },
+        ADO_USER(state, user){
+            state.userData.push(user);
         },
     },
 };
